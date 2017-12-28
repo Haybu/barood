@@ -1,0 +1,15 @@
+applications:
+  - name: catalog-data-service
+    host: catalogio
+    memory: 1024M
+    instances: 1
+    timeout: 180
+    health-check-type: http
+    health-check-timeout: 180
+    health-check-http-endpoint: /catalog/health
+    path: ./target/catalog-data-service-0.0.1-SNAPSHOT.jar
+    services:
+      - config-server
+      - registry-service
+      - circuit-breaker-dashboard
+      - mysqldb

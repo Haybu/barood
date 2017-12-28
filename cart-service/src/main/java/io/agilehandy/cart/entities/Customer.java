@@ -2,6 +2,7 @@ package io.agilehandy.cart.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -21,7 +22,14 @@ public class Customer {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy= GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     public int getId() {
         return id;
     }

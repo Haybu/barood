@@ -2,6 +2,7 @@ package io.agilehandy.cart.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -20,7 +21,14 @@ public class CartItem {
 
     @Id
     @Column(name = "cart_id")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy= GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     public int getCartId() {
         return cartId;
     }
