@@ -1,13 +1,15 @@
 spring:
   application:
-    name: config-server
-  profiles:
-    active: native
+    name: config-service
   cloud:
     config:
       server:
-        native:
-          search-locations: file://${user.home}/github/barood/config-repo
+        git:
+          uri: https://github.com/Haybu/temp-config-repo.git
+#        native:
+#          search-locations: file://${user.home}/Workspaces/github/Haybu/barood/config-repo
+#  profiles:
+#    active: native
 
 server:
   port: 8888
@@ -18,3 +20,17 @@ eureka:
       enabled: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+---
+spring:
+  profiles: cloud
+
+server:
+  port: 8080
+
+# You can define a user-defined-service and bind it to this config server
+# so you can bind to it
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.registry-service.credentials.uri}

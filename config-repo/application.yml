@@ -1,0 +1,83 @@
+server:
+  port: 8080
+
+management:
+  context-path: /admin
+  health:
+    db.enabled: true
+  security:
+    enabled: false
+  endpoints:
+    enabled-by-default: true
+    web.enabled: true
+  endpoint:
+    env.enabled: true
+    auditevents.enabled: true
+    beans.enabled: true
+    conditions.enabled: true
+    configprops.enabled: true
+    health.enabled: true
+    heapdump.enabled: true
+    info.enabled: true
+    logfile.enabled: true
+    mappings.enabled: true
+    loggers.enabled: true
+    metrics.enabled: true
+  cloudfoundry:
+    enabled: true
+    skip-ssl-validation: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    hostname: localhost
+    statusPageUrlPath: ${management.context-path}/info
+    healthCheckUrlPath: ${management.context-path}/health
+
+###
+#   H2 Database Settings
+###
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:~/${spring.application.name}
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: create-drop
+      show_sql: true
+      use_sql_comments: false
+      format_sql: false
+
+
+###
+#   Postgresql Database Settings
+###
+#spring.datasource.url=jdbc:postgresql://localhost/test
+#spring.datasource.username=admin
+#spring.datasource.password=admin
+#spring.datasource.driver-class-name=org.postgresql.Driver
+
+---
+spring:
+  profiles: cloud
+  cloud:
+    services:
+      registrationMethod: route
+
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]}
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.registry-service.credentials.uri}
