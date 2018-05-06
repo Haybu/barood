@@ -1,21 +1,20 @@
 package io.agilehandy.cart.endpoints;
 
+import io.agilehandy.cart.clients.CatalogClient;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class CartController {
 
-    private final RestTemplate template;
+	private final CatalogClient catalog;
 
-	public CartController(RestTemplate template) {
-		this.template = template;
+	public CartController(CatalogClient catalog) {
+		this.catalog = catalog;
 	}
 
 	@GetMapping("/ping")
@@ -28,15 +27,9 @@ public class CartController {
         return  this.remoteCall(pname);
     }
 
-	public String remoteCall(String product) {
-		String url = "http://catalog-data-service/catalog/products/search/findByName?name={pname}";
-		Map<String, String> params = new HashMap();
-		params.put("pname", product);
-
-		final ResponseEntity<String> responseEntity = template
-				.getForEntity(url, String.class, params);
-
-		return responseEntity.getBody();
+    public String remoteCall(String product) {
+		ResponseEntity<Resource<String>> resource = catalog.getProduct(product);
+		return resource.getBody().getContent();
 	}
 
 }

@@ -1,8 +1,7 @@
 server:
-  port: 8080
+  port: 0
 
 management:
-  context-path: /admin
   health:
     db.enabled: true
   security:
@@ -10,6 +9,7 @@ management:
   endpoints:
     enabled-by-default: true
     web.enabled: true
+    web.base-path: /admin
   endpoint:
     env.enabled: true
     auditevents.enabled: true
@@ -35,8 +35,8 @@ eureka:
       enabled: true
   instance:
     hostname: localhost
-    statusPageUrlPath: ${management.context-path}/info
-    healthCheckUrlPath: ${management.context-path}/health
+    statusPageUrlPath: ${server.servlet.context-path}${management.endpoints.web.base-path}/info
+    healthCheckUrlPath: ${server.servlet.context-path}${management.endpoints.web.base-path}/health
 
 ###
 #   H2 Database Settings
@@ -59,7 +59,6 @@ spring:
       use_sql_comments: false
       format_sql: false
 
-
 ###
 #   Postgresql Database Settings
 ###
@@ -81,3 +80,6 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${vcap.services.registry-service.credentials.uri}
+
+server:
+  port: 8080

@@ -1,0 +1,25 @@
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+logging:
+  level:
+    com.netflix.eureka: 'OFF'
+    com.netflix.discovery: 'OFF'
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+    statusPageUrlPath: ${management.endpoints.web.base-path}/info
+    healthCheckUrlPath: ${management.endpoints.web.base-path}/health
+
+---
+spring:
+  profiles: cloud
+
+server:
+  port: 8080

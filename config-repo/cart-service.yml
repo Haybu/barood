@@ -1,2 +1,4 @@
 server:
-  context-path: /cart
+  servlet:
+    context-path: /cart
+
